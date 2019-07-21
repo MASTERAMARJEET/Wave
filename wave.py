@@ -6,7 +6,6 @@ class em_wave():
 	c = 3*(10**8)					#unit-> m/sec
 	E = np.array([1, 0])
 	phi = np.array([0, 0])
-	vector = np.array([1,0])
 	k_unit = np.array([0,0,1])		#unit-> 1/m
 	r = np.array([0,0,1])			#unit-> 1/m
 	t = 0							#unit-> sec
@@ -16,7 +15,7 @@ class em_wave():
 		self.wavelenght = wavelenght
 		self.frequency = self.c/self.wavelenght
 		self.k = (2*pi/self.wavelenght)*self.k_unit
-		self.omega = 2*pi/self.frequency
+		self.omega = 2*pi*self.frequency
 	
 	def __repr__(self):
 		return 'This is a wave object which can given all the proprties that a wave should have.For more info. type object.help()'
@@ -27,7 +26,7 @@ class em_wave():
 		self.wave_eq = np.array([P*cos(np.dot(self.k,self.r) - self.omega*self.t + Q) for P,Q in zip(self.E,self.phi)])
 
 	def Wave_eq(self,r):
-		self.r = r
+		self.r = np.array(r)
 		self.wave_eq = np.array([P*cos(np.dot(self.k,self.r) - self.omega*self.t + Q) for P,Q in zip(self.E,self.phi)])
 		return self.wave_eq
 
