@@ -1,13 +1,18 @@
-from math import pi, sqrt
-from cmath import exp
+from math import pi, sqrt, cos
+# from cmath import *
 import numpy as np
 import matplotlib.pyplot as plt
 
-class wave():
+class em_wave():
+	
 	c = 3*(10**8)					#unit-> m/sec
+	E = np.array([1, 0])
+	phi = np.array([0, 0])
+	vector = np.array([1,0])
 	k_unit = np.array([0,0,1])		#unit-> 1/m
 	r = np.array([0,0,1])			#unit-> 1/m
 	t = 0							#unit-> sec
+	
 	def __init__(self,name,wavelenght):
 		self.wave_name = name
 		self.wavelenght = wavelenght
@@ -18,11 +23,14 @@ class wave():
 	def __repr__(self):
 		return 'This is a wave object which can given all the proprties that a wave should have.For more info. type object.help()'
 
-	def Wave_eq(self,r,E=1):
-		self.E = E
+	def set_eq(self,E,phi):
+		self.E = np.array(E)
+		self.phi = np.array(phi)
+		self.wave_eq = np.array([P*cos(np.dot(self.k,self.r) - self.omega*self.t + Q) for P,Q in zip(self.E,self.phi)])
+
+	def Wave_eq(self,r):
 		self.r = r
-		Buffer = E*exp((np.dot(self.k,self.r) - self.omega*self.t)*1j)
-		self.wave_eq = Buffer.real
+		self.wave_eq = np.array([P*cos(np.dot(self.k,self.r) - self.omega*self.t + Q) for P,Q in zip(self.E,self.phi)])
 		return self.wave_eq
 
 	def help(self):
@@ -33,14 +41,18 @@ class wave():
 		print(f'E:{self.E}')
 		print(f'k:{self.k}')
 		print(f'r:{self.r}')
+		print(f'phi:{self.phi}')
 		print(f'wave_eq:{self.wave_eq}')
 		
-w1 = wave('apple',100)
-R = np.array([10,9,8])
-w1.Wave_eq(R)
+w1 = em_wave('apple',100)
+R = np.array([10,10.1,10.2])
+a = w1.Wave_eq(R)
 print(w1.E)
 w1.E = w1.E/sqrt(sum([p**2 for p in R]))
-print(w1.E)
+w1.help()
+w1.set_eq([1,1], [0, pi/2])
+w1.help()
+
 # f = 1
 # Box = []
 # for z in range(1):
@@ -52,4 +64,4 @@ print(w1.E)
 # 			w1.r = np.array([x,y,z])
 # 			S = w1.Wave_eq(np.array([10,10,10]), f)
 # 			Box[z-1][y-1].append(S)
-# print(Box)
+# print(Box) 
